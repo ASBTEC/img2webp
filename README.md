@@ -19,6 +19,18 @@ cd img2webp
 sudo bash tools/install_docker.sh
 ```
 
+### Build software
+```shell
+docker build . -t aleixmt/img2webp:latest
+```
+
+### Install alias
+```shell
+echo "
+alias img2webp=\"docker run --rm -it --user \"\$(id -u):\$(id -g)\" -v \"\$PWD/input:/data/in:ro\" -v \"\$PWD/output:/data/out\" aleixmt/img2webp:latest --input-location /data/in --output-location /data/out --verbose\"" >> $HOME/.bashrc
+source $HOME/.bashrc
+```
+
 
 ## Usage
 Each time you want to convert images.
@@ -29,7 +41,7 @@ mv your/photo/location/photo.png output/
 
 ### Run software
 ```shell
-docker compose up --build
+img2webp
 ```
 
 ### Get images

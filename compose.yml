@@ -2,6 +2,7 @@
 services:
   img2webp:
     build: .
+    user: "${UID}:${GID}"          # run as the host user
     volumes:
       - ./input:/data/in:ro
       - ./output:/data/out
