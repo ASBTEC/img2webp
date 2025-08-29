@@ -27,7 +27,7 @@ docker build . -t aleixmt/img2webp:latest
 ### Install alias
 ```shell
 echo "
-alias img2webp=\"docker run --rm -it --user \"\$(id -u):\$(id -g)\" -v \"\$PWD/input:/data/in:ro\" -v \"\$PWD/output:/data/out\" aleixmt/img2webp:latest --input-location /data/in --output-location /data/out --verbose\"" >> $HOME/.bashrc
+alias img2webp=\"docker run --rm -it --user \"\$(id -u):\$(id -g)\" -v \"$PWD/input:/data/in:ro\" -v \"$PWD/output:/data/out\" aleixmt/img2webp:latest --input-location /data/in --output-location /data/out --verbose\"" >> $HOME/.bashrc
 source $HOME/.bashrc
 ```
 
