@@ -1,0 +1,8 @@
+# compose.yml
+services:
+  img2webp:
+    build: .
+    volumes:
+      - ./input:/data/in:ro
+      - ./output:/data/out
+    command: ["--input-location","/data/in","--output-location","/data/out","--verbose"]

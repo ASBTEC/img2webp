@@ -1,0 +1,30 @@
+# .dockerignore
+# VCS
+.git
+.gitignore
+
+# Python cruft
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.build/
+dist/
+.mypy_cache/
+.pytest_cache/
+.pyre/
+.tox/
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Not needed in build context
+input/
+output/
