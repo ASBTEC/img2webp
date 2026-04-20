@@ -9,6 +9,9 @@ on:
       file_url:
         description: 'Google Drive file URL of the zip or image to convert'
         required: true
+      filename:
+        description: 'Original filename with extension (e.g. photo.png, assets.zip)'
+        required: true
 
 env:
   EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
@@ -23,7 +26,7 @@ jobs:
 
       - name: Download input file into input folder
         run: |
-          curl -L -J -O --output-dir ./input/ "https://drive.google.com/open?id=${{ github.event.inputs.file_url }}"
+          curl -L -o "./input/${{ github.event.inputs.filename }}" "https://drive.google.com/open?id=${{ github.event.inputs.file_url }}"
 
       - name: Set up Python
         uses: actions/setup-python@v5
