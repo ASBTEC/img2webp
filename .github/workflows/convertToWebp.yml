@@ -6,14 +6,9 @@ on:
       email:
         description: 'Recipient email address'
         required: true
-      verbose:
-        description: 'Enable verbose logging'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
+      file_url:
+        description: 'Google Drive file URL of the zip or image to convert'
+        required: true
 
 env:
   EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
@@ -25,6 +20,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download input file into input folder
+        run: |
+          curl -L -J -O --output-dir ./input/ "${{ github.event.inputs.file_url }}"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,14 +37,10 @@ jobs:
 
       - name: Convert images to WebP
         run: |
-          VERBOSE_FLAG=""
-          if [ "${{ github.event.inputs.verbose }}" = "true" ]; then
-            VERBOSE_FLAG="--verbose"
-          fi
           venv/bin/python src/main.py \
             --input-location ./input \
             --output-location ./output \
-            $VERBOSE_FLAG
+            --verbose
 
       - name: Send output zip by email
         run: |
