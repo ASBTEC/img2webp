@@ -1,0 +1,53 @@
+name: convertToWebp
+
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: 'Recipient email address'
+        required: true
+      verbose:
+        description: 'Enable verbose logging'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
+jobs:
+  convert_to_webp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual environment and install dependencies
+        run: |
+          python3 -m venv venv
+          venv/bin/pip install -r requirements.txt
+
+      - name: Convert images to WebP
+        run: |
+          VERBOSE_FLAG=""
+          if [ "${{ github.event.inputs.verbose }}" = "true" ]; then
+            VERBOSE_FLAG="--verbose"
+          fi
+          venv/bin/python src/main.py \
+            --input-location ./input \
+            --output-location ./output \
+            $VERBOSE_FLAG
+
+      - name: Send output zip by email
+        run: |
+          chmod u+x src/sendWebp.sh
+          ./src/sendWebp.sh "${{ github.event.inputs.email }}"

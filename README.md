@@ -1,7 +1,29 @@
 # img2webp
 Converts images into webp format
 
-## Setup
+## Quick start (Python)
+No Docker required.
+
+### Create virtual environment
+```shell
+python3 -m venv venv
+```
+
+### Install dependencies
+```shell
+venv/bin/pip install -r requirements.txt
+```
+
+### Run
+```shell
+venv/bin/python src/main.py --input-location ./input --output-location ./output
+```
+
+Add `--verbose` for detailed logging.
+
+---
+
+## Setup (Docker)
 Once for machine.
 ### Install git
 ```shell

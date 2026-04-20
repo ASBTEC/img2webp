@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+import zipfile
 from pathlib import Path
 from typing import Callable, Dict
 
@@ -259,18 +260,42 @@ def gif2webp(src: Path, dst: Path) -> None:
 # Pipeline
 # -----------------------------
 
+def extract_zips(input_dir: Path) -> int:
+    """Extract any .zip files found in input_dir into input_dir, then remove them."""
+    count = 0
+    for entry in sorted(input_dir.iterdir()):
+        if not entry.is_file() or entry.suffix.lower() != ".zip":
+            continue
+        try:
+            with zipfile.ZipFile(entry, "r") as zf:
+                zf.extractall(input_dir)
+            entry.unlink()
+            logging.info("Extracted and removed zip: %s", entry.name)
+            count += 1
+        except zipfile.BadZipFile:
+            logging.warning("Not a valid zip file, skipping: %s", entry.name)
+        except Exception as e:
+            logging.exception("Failed extracting %s: %s", entry.name, e)
+    return count
+
+
 def process_directory(input_dir: Path, output_dir: Path) -> None:
     """
-    Convert all accepted images in input_dir (non-recursive) to WebP in output_dir.
+    Convert all accepted images in input_dir (recursive) to WebP in output_dir.
+    Zip files are extracted in place before conversion.
     """
     logging.info("Scanning input: %s", input_dir)
+
+    extracted = extract_zips(input_dir)
+    if extracted:
+        logging.info("Extracted %d zip archive(s); rescanning for images.", extracted)
 
     count_total = 0
     count_converted = 0
     count_skipped = 0
     count_failed = 0
 
-    for entry in sorted(input_dir.iterdir()):
+    for entry in sorted(input_dir.rglob("*")):
         if not entry.is_file():
             continue
 
