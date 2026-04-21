@@ -26,7 +26,7 @@ jobs:
 
       - name: Download input file into input folder
         run: |
-          curl -L -o "./input/${{ github.event.inputs.filename }}" "https://drive.google.com/open?id=${{ github.event.inputs.file_url }}"
+          curl -L -o "./input/${{ github.event.inputs.filename }}" "https://drive.usercontent.google.com/u/1/uc?id=${{ github.event.inputs.file_url }}&export=download"
 
       - name: Set up Python
         uses: actions/setup-python@v5
