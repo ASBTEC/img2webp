@@ -5,7 +5,7 @@ PROJECT_FOLDER="$(cd "$(dirname "$(realpath "$0")")/../" &>/dev/null && pwd)"
 RECIPIENT_EMAIL="${1}"
 ZIP_PATH="${PROJECT_FOLDER}/webp-output.zip"
 
-zip -r "${ZIP_PATH}" "${PROJECT_FOLDER}/output/"
+cd "${PROJECT_FOLDER}/output/" && zip -r "${ZIP_PATH}" . && cd -
 
 curl -v --url 'smtps://smtp.gmail.com:465' \
   --ssl-reqd \
