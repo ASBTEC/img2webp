@@ -24,10 +24,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download input file into input folder
-        run: |
-          curl -L -o "./input/${{ github.event.inputs.filename }}" "https://drive.usercontent.google.com/u/1/uc?id=${{ github.event.inputs.file_url }}&export=download"
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -37,6 +33,10 @@ jobs:
         run: |
           python3 -m venv venv
           venv/bin/pip install -r requirements.txt
+
+      - name: Download input file into input folder
+        run: |
+          venv/bin/gdown --id "${{ github.event.inputs.file_url }}" -O "./input/${{ github.event.inputs.filename }}"
 
       - name: Convert images to WebP
         run: |
